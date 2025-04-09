@@ -1,0 +1,203 @@
+/* Responsive Styles for Blazer Chat */
+
+/* Base responsive settings */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile devices (phones, 576px and down) */
+@media (max-width: 576px) {
+  .container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  /* Header adjustments */
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+  
+  /* Theme toggle button */
+  .theme-toggle-btn {
+    position: absolute;
+    top: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 90%;
+    margin-right: 0;
+  }
+  
+  /* Forms */
+  form .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Chat container */
+  .chat-container {
+    height: calc(100vh - 180px);
+    min-height: 300px;
+  }
+  
+  .chat-messages {
+    max-height: calc(100vh - 250px);
+  }
+  
+  /* Room cards */
+  .room-card {
+    margin-bottom: 1rem;
+  }
+  
+  /* Admin tables */
+  .admin-table {
+    font-size: 0.85rem;
+  }
+  
+  .admin-table th, .admin-table td {
+    padding: 0.4rem 0.5rem;
+  }
+  
+  /* Button groups */
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .btn-group .btn {
+    margin-right: 0 !important;
+    margin-bottom: 0.3rem;
+  }
+  
+  /* Card and table overflow */
+  .card-body {
+    padding: 0.75rem;
+  }
+  
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Message reactions for mobile */
+  .reaction-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.2rem;
+  }
+  
+  .reaction-btn {
+    font-size: 0.9rem;
+    padding: 2px;
+  }
+  
+  .reaction-count {
+    font-size: 0.7rem;
+    padding: 1px 4px;
+  }
+}
+
+/* Tablets and small desktops (768px to 992px) */
+@media (min-width: 577px) and (max-width: 991px) {
+  /* Chat container */
+  .chat-container {
+    height: calc(100vh - 200px);
+  }
+  
+  .chat-messages {
+    max-height: calc(100vh - 270px);
+  }
+  
+  /* Theme toggle */
+  .theme-toggle-btn {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.8rem;
+  }
+  
+  /* Admin tables */
+  .admin-table {
+    font-size: 0.9rem;
+  }
+  
+  /* Button adjustments */
+  .btn-group .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Large desktops and beyond (1200px and up) */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+  
+  .chat-container {
+    height: calc(100vh - 220px);
+    min-height: 500px;
+  }
+  
+  .chat-messages {
+    max-height: calc(100vh - 300px);
+  }
+}
+
+/* Ensure tables are horizontally scrollable on all devices */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+/* Improve scrollbar appearance */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Touch-friendly buttons */
+.btn {
+  touch-action: manipulation;
+}
+
+/* Ensure modal dialogs are properly displayed on mobile */
+.modal-dialog {
+  margin: 0.5rem;
+  max-width: calc(100% - 1rem);
+}
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    margin: 1.75rem auto;
+    max-width: 500px;
+  }
+}
+
+/* Print styles to make the site printable if needed */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .chat-container {
+    height: auto;
+    overflow: visible;
+  }
+}

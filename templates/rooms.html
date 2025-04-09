@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Chat Rooms - Blazer Chat{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-lg-8 mx-auto">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="title-crt"><i class="fas fa-door-open me-2"></i>Chat Rooms</h1>
+            
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createRoomModal">
+                <i class="fas fa-plus me-1"></i> Create Room
+            </button>
+        </div>
+        
+        <!-- My Rooms -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-home me-2"></i>My Rooms</h3>
+            </div>
+            <div class="card-body room-list">
+                {% if rooms %}
+                    <div class="row row-cols-1 row-cols-md-2 g-3">
+                        {% for room in rooms %}
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ room.name }}</h5>
+                                        <p class="card-text small text-secondary">
+                                            Created by: {{ room.creator.username }}<br>
+                                            on {{ room.created_at.strftime('%Y-%m-%d') }}
+                                        </p>
+                                    </div>
+                                    <div class="card-footer d-grid">
+                                        <a href="{{ url_for('chat', room_id=room.id) }}" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-comments me-1"></i> Enter Room
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <p class="mb-0 text-secondary">You haven't joined any rooms yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Available Rooms -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-search me-2"></i>Available Rooms</h3>
+            </div>
+            <div class="card-body room-list">
+                {% if other_rooms %}
+                    <div class="row row-cols-1 row-cols-md-2 g-3">
+                        {% for room in other_rooms %}
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ room.name }}</h5>
+                                        <p class="card-text small text-secondary">
+                                            Created by: {{ room.creator.username }}<br>
+                                            on {{ room.created_at.strftime('%Y-%m-%d') }}
+                                        </p>
+                                    </div>
+                                    <div class="card-footer d-grid">
+                                        <a href="{{ url_for('join_chat_room', room_id=room.id) }}" class="btn btn-secondary btn-sm">
+                                            <i class="fas fa-sign-in-alt me-1"></i> Join Room
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <p class="mb-0 text-secondary">No other rooms available.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Room Modal -->
+<div class="modal fade" id="createRoomModal" tabindex="-1" aria-labelledby="createRoomModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createRoomModalLabel">Create New Room</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ url_for('create_room') }}">
+                {{ create_room_form.hidden_tag() }}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        {{ create_room_form.name.label(class="form-label") }}
+                        {% if create_room_form.name.errors %}
+                            {{ create_room_form.name(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in create_room_form.name.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ create_room_form.name(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    {{ create_room_form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

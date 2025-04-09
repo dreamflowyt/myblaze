@@ -1,72 +1,154 @@
-{% extends "admin/base.html" %}
+{% extends "base.html" %}
 
-{% block admin_title %}Admin Dashboard{% endblock %}
+{% block title %}Admin Dashboard - Blazer Chat{% endblock %}
 
-{% block admin_content %}
-<div class="row">
-    <!-- Statistics Cards -->
-    <div class="col-md-4 mb-4">
-        <div class="card bg-primary text-white">
-            <div class="card-body">
-                <h5 class="card-title">Total Users</h5>
-                <p class="card-text display-4">{{ users|length }}</p>
+{% block extra_css %}
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-lg-10 mx-auto">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="title-crt"><i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard</h1>
+        </div>
+        
+        <!-- Admin Navigation -->
+        <ul class="nav nav-tabs mb-4">
+            <li class="nav-item">
+                <a class="nav-link active" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_users') }}">Users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_rooms') }}">Rooms</a>
+            </li>
+        </ul>
+        
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card stats-card">
+                    <div class="number">{{ user_count }}</div>
+                    <div class="label">Total Users</div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card stats-card">
+                    <div class="number">{{ room_count }}</div>
+                    <div class="label">Total Rooms</div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card stats-card">
+                    <div class="number">{{ message_count }}</div>
+                    <div class="label">Total Messages</div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4 mb-4">
-        <div class="card bg-success text-white">
-            <div class="card-body">
-                <h5 class="card-title">Total Rooms</h5>
-                <p class="card-text display-4">{{ rooms|length }}</p>
+        
+        <!-- Charts -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>User Growth</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="usersChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Message Activity</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="messagesChart"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4 mb-4">
-        <div class="card bg-info text-white">
-            <div class="card-body">
-                <h5 class="card-title">Recent Messages</h5>
-                <p class="card-text display-4">{{ messages|length }}</p>
+        
+        <!-- Recent Users -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-user-clock me-2"></i>Recent Users</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Joined</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in recent_users %}
+                                        <tr>
+                                            <td>{{ user.username }}</td>
+                                            <td>{{ user.email }}</td>
+                                            <td>{{ user.date_joined.strftime('%Y-%m-%d') }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-end">
+                            <a href="{{ url_for('admin_users') }}" class="btn btn-sm btn-primary">View All Users</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Active Rooms -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-fire me-2"></i>Most Active Rooms</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Room Name</th>
+                                        <th>Created By</th>
+                                        <th>Created On</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for room in active_rooms %}
+                                        <tr>
+                                            <td>{{ room.name }}</td>
+                                            <td>{{ room.creator.username }}</td>
+                                            <td>{{ room.created_at.strftime('%Y-%m-%d') }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-end">
+                            <a href="{{ url_for('admin_rooms') }}" class="btn btn-sm btn-primary">View All Rooms</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
 
-<!-- Recent Messages -->
-<div class="card mt-4">
-    <div class="card-header">
-        <h5 class="mb-0">Recent Messages</h5>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Time</th>
-                        <th>User</th>
-                        <th>Room</th>
-                        <th>Message</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for message in messages %}
-                    <tr>
-                        <td>{{ message.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                        <td>{{ message.author.username }}</td>
-                        <td>{{ message.room.name }}</td>
-                        <td>{{ message.content }}</td>
-                        <td>
-                            <form action="{{ url_for('delete_message', message_id=message.id) }}" method="POST" class="d-inline">
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this message?')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-{% endblock %} 
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}
