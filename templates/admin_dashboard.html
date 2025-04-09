@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Chat Application{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    
+    .admin-card {
+        border: 2px solid var(--primary-color);
+        position: relative;
+    }
+    
+    .admin-card::before {
+        content: '';
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        border: 1px solid var(--accent-color);
+        z-index: -1;
+    }
+    
+    .admin-header {
+        background-color: var(--primary-color);
+        color: var(--light-text);
+        padding: 15px;
+        border-bottom: 2px solid var(--accent-color);
+    }
+    
+    .admin-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+    
+    .admin-body {
+        padding: 20px;
+    }
+    
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    
+    .admin-table th {
+        background-color: var(--primary-color);
+        color: var(--light-text);
+        padding: 10px;
+        text-align: left;
+    }
+    
+    .admin-table td {
+        padding: 10px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .admin-table tr:hover {
+        background-color: rgba(231, 76, 60, 0.1);
+    }
+    
+    .admin-action {
+        display: inline-block;
+        padding: 5px 10px;
+        margin: 0 5px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+    
+    .admin-action.delete {
+        background-color: var(--danger-color);
+        color: var(--light-text);
+    }
+    
+    .admin-action.verify {
+        background-color: var(--success-color);
+        color: var(--light-text);
+    }
+    
+    .admin-action.ban {
+        background-color: var(--warning-color);
+        color: var(--light-text);
+    }
+    
+    .admin-form {
+        margin-top: 20px;
+    }
+    
+    .admin-form .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .admin-form .btn {
+        margin-top: 10px;
+    }
+    
+    .admin-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .stat-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        padding: 15px;
+        text-align: center;
+    }
+    
+    .stat-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--accent-color);
+    }
+    
+    .stat-label {
+        font-size: 0.9rem;
+        color: var(--text-color);
+        margin-top: 5px;
+    }
+    
+    @media (max-width: 768px) {
+        .admin-container {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-card">
+        <div class="admin-header">
+            <h2 class="retro-text">[ ADMIN DASHBOARD ]</h2>
+        </div>
+        <div class="admin-body">
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <div class="stat-value">{{ users|length }}</div>
+                    <div class="stat-label retro-text">TOTAL USERS</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{ rooms|length }}</div>
+                    <div class="stat-label retro-text">TOTAL ROOMS</div>
+                </div>
+            </div>
+            
+            <h3 class="retro-text">[ USER MANAGEMENT ]</h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th class="retro-text">USERNAME</th>
+                        <th class="retro-text">EMAIL</th>
+                        <th class="retro-text">STATUS</th>
+                        <th class="retro-text">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% if user.is_verified %}
+                                <span class="retro-highlight">VERIFIED</span>
+                            {% else %}
+                                <span style="color: var(--warning-color);">UNVERIFIED</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not user.is_verified %}
+                                <a href="{{ url_for('verify_user', user_id=user.id) }}" class="admin-action verify retro-text">VERIFY</a>
+                            {% endif %}
+                            {% if not user.is_admin %}
+                                <a href="{{ url_for('delete_user', user_id=user.id) }}" class="admin-action delete retro-text" onclick="return confirm('Are you sure you want to delete this user?')">DELETE</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="admin-card">
+        <div class="admin-header">
+            <h2 class="retro-text">[ ROOM MANAGEMENT ]</h2>
+        </div>
+        <div class="admin-body">
+            <h3 class="retro-text">[ CREATE NEW ROOM ]</h3>
+            <form method="POST" action="{{ url_for('create_room') }}" class="admin-form">
+                <div class="form-group">
+                    <label for="room_name" class="form-label retro-text">ROOM NAME</label>
+                    <input type="text" class="form-control" id="room_name" name="room_name" required>
+                </div>
+                <button type="submit" class="btn btn-primary retro-text">CREATE ROOM</button>
+            </form>
+            
+            <h3 class="retro-text" style="margin-top: 30px;">[ EXISTING ROOMS ]</h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th class="retro-text">ROOM NAME</th>
+                        <th class="retro-text">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for room in rooms %}
+                    <tr>
+                        <td>{{ room.name }}</td>
+                        <td>
+                            <a href="{{ url_for('delete_room', room_id=room.id) }}" class="admin-action delete retro-text" onclick="return confirm('Are you sure you want to delete this room?')">DELETE</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %} 

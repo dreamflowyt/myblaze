@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Chat Application{% endblock %}
+
+{% block content %}
+<div class="card retro-border">
+    <div class="card-header">
+        <h2 class="card-title retro-text">[ REGISTER ]</h2>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('register') }}">
+            <div class="form-group">
+                <label for="username" class="form-label retro-text">USERNAME</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email" class="form-label retro-text">EMAIL</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password" class="form-label retro-text">PASSWORD</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="form-group" style="margin-top: 30px;">
+                <button type="submit" class="btn btn-primary retro-text">REGISTER</button>
+            </div>
+        </form>
+        <div style="margin-top: 20px; text-align: center;">
+            <p class="retro-text">Already have an account? <a href="{{ url_for('login') }}" class="retro-highlight">LOGIN</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %} 

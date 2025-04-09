@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Resend Verification - Chat Application{% endblock %}
+
+{% block content %}
+<div class="card retro-border">
+    <div class="card-header">
+        <h2 class="card-title retro-text">[ RESEND VERIFICATION ]</h2>
+    </div>
+    <div class="card-body">
+        <p class="retro-text">Enter your email address below to receive a new verification link.</p>
+        <form method="POST" action="{{ url_for('resend_verification') }}">
+            <div class="form-group">
+                <label for="email" class="form-label retro-text">EMAIL</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group" style="margin-top: 30px;">
+                <button type="submit" class="btn btn-primary retro-text">SEND VERIFICATION</button>
+            </div>
+        </form>
+        <div style="margin-top: 20px; text-align: center;">
+            <p class="retro-text"><a href="{{ url_for('login') }}" class="retro-highlight">RETURN TO LOGIN</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %} 

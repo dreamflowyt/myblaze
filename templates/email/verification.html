@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 2px solid #2c3e50;
+            position: relative;
+        }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 1px solid #e74c3c;
+            z-index: -1;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border-bottom: 3px solid #e74c3c;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: 2px;
+        }
+        .content {
+            padding: 20px;
+            color: #333;
+        }
+        .content h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 20px;
+        }
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #e74c3c;
+            color: #ffffff;
+            text-decoration: none;
+            border: 2px solid #c0392b;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .button:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .link-text {
+            word-break: break-all;
+            color: #7f8c8d;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px dashed #bdc3c7;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 12px;
+            border-top: 1px solid #ecf0f1;
+            margin-top: 20px;
+        }
+        .retro-highlight {
+            background-color: rgba(231, 76, 60, 0.1);
+            padding: 2px 5px;
+        }
+        .retro-border {
+            border: 1px solid #2c3e50;
+            padding: 10px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>[ EMAIL VERIFICATION ]</h1>
+        </div>
+        <div class="content">
+            <h2>Hello!</h2>
+            <p>Thank you for registering with our <span class="retro-highlight">CHAT APPLICATION</span>. To complete your registration and verify your email address, please click the button below:</p>
+            
+            <div class="button-container">
+                <a href="{{ verification_link }}" class="button">VERIFY EMAIL ADDRESS</a>
+            </div>
+            
+            <div class="retro-border">
+                <p>If the button above doesn't work, you can also copy and paste the following link into your browser:</p>
+                <p class="link-text">{{ verification_link }}</p>
+            </div>
+            
+            <p>This verification link will expire in <span class="retro-highlight">1 hour</span> for security reasons.</p>
+            
+            <p>If you did not create an account with us, please ignore this email.</p>
+        </div>
+        <div class="footer">
+            <p>This is an automated message, please do not reply to this email.</p>
+            <p>&copy; 2024 Chat Application. All rights reserved.</p>
+            
+        </div>
+    </div>
+</body>
+</html> 

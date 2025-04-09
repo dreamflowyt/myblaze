@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+        <h1 class="display-4 mb-4">Welcome to Chat Room</h1>
+        <p class="lead mb-4">Join our chat rooms and start chatting with others!</p>
+        <div class="d-grid gap-3 col-6 mx-auto">
+            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Login</a>
+            <a href="{{ url_for('register') }}" class="btn btn-outline-primary btn-lg">Register</a>
+        </div>
+    </div>
+</div>
+{% endblock %} 
